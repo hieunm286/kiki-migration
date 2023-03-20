@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     // vite config
+    base: '/kiki-migration/',
     server: {
       port: env.PORT ?? 3001,
       open: true,
