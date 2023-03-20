@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ErrorUtils } from '../utils/api-services/error';
 import { apiServices } from '../apis/index';
 import { setSession } from '../utils/setSession';
+import http, { HttpClient } from '../utils/api-services/http';
 
 export const transferProgressStatus = {
   nothing: -1,
@@ -45,6 +46,12 @@ export default function useAppContext() {
 
   const [startFetchProgressStatus, setStartFetchStatus] = useState(transferProgressStatus.nothing);
   const [transferringData, setTransferringData] = useState();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    console.log(params.get('localPort'));
+    http.local = new HttpClient(`http://localhost/${params.get('localPort')}`);
+  }, []);
 
   useEffect(() => {
     let interval;

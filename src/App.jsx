@@ -31,12 +31,6 @@ function App() {
   const [formLoginTransferPlatform] = useObservable(formLoginTransferPlatform$);
 
   console.log({ formLoginKiki, formLoginTransferPlatform });
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    console.log(params.get('localPort'));
-    http.local = new HttpClient(`http://localhost/${params.get('localPort')}`);
-  }, []);
-
   if (!formLoginKiki || !formLoginTransferPlatform) {
     return null;
   }
