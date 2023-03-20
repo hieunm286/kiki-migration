@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PLATFORMS } from './utils/constants';
 import KikiLogin from './assets/kiki-logo.png';
 import useAppContext from './hooks/useAppContext';
 import classNames from './utils/helpers';
+import { manageFormKikiLogin$, manageFormTransferPlatformLogin$ } from './features/login';
+import useObservable from './hooks/useObservable';
+import http, { HttpClient } from './utils/api-services/http';
 
 function App() {
   const { t } = useTranslation();
@@ -22,6 +25,22 @@ function App() {
     logoutKiki,
   } = useAppContext();
 
+  const formLoginKiki$ = manageFormKikiLogin$();
+  const formLoginTransferPlatform$ = manageFormTransferPlatformLogin$();
+  const [formLoginKiki] = useObservable(formLoginKiki$);
+  const [formLoginTransferPlatform] = useObservable(formLoginTransferPlatform$);
+
+  console.log({ formLoginKiki, formLoginTransferPlatform });
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    console.log(params.get('localPort'));
+    http.local = new HttpClient(`http://localhost/${params.get('localPort')}`);
+  }, []);
+
+  if (!formLoginKiki || !formLoginTransferPlatform) {
+    return null;
+  }
+
   return (
     <div className='md:h-screen flex justify-center items-center'>
       <div className='w-full max-w-[700px] border border-silver-500 rounded-lg mx-auto overflow-hidden pb-4'>
@@ -32,7 +51,7 @@ function App() {
           <div className='w-full md:w-1/2'>
             <div className=''>
               <p className='text-silver-500 font-semibold'>{t('Vui lòng chọn nền tảng cần chuyển đổi')}</p>
-              <div onChange={onChangePlatform}>
+              <div onChange={formLoginTransferPlatform.updatePlatform}>
                 {PLATFORMS.map((platform) => (
                   <div key={platform.name} className='flex items-center'>
                     <input type='radio' id={platform.name} value={platform.name} name='platform' />
@@ -47,15 +66,15 @@ function App() {
             <div className='flex flex-col gap-3'>
               <p className='font-semibold'>{t('Thông tin đăng nhập')}</p>
               <input
-                value={formState.email}
-                onChange={onChangeFormState}
+                value={formLoginTransferPlatform.email}
+                onChange={formLoginTransferPlatform.updateFormValue}
                 name='email'
                 className='p-1 rounded w-full outline-none border border-gray-300 focus:border-gray-500 focus:shadow-s placeholder:text-sm'
                 placeholder={t('Nhập email')}
               />
               <input
-                value={formState.password}
-                onChange={onChangeFormState}
+                value={formLoginTransferPlatform.password}
+                onChange={formLoginTransferPlatform.updateFormValue}
                 type='password'
                 name='password'
                 className='p-1 rounded w-full outline-none border border-gray-300 focus:border-gray-500 focus:shadow-s placeholder:text-sm'
@@ -72,26 +91,26 @@ function App() {
               <img src={KikiLogin} className='w-20' alt='logo' />
             </div>
 
-            {kikiUser.email ? (
+            {formLoginKiki.loginData?.userInfo?.email ? (
               <div className='flex flex-col gap-2 mt-3 items-start'>
                 <span>
-                  {t('Xin chào')}, <strong>{kikiUser.email}</strong>
+                  {t('Xin chào')}, <strong>{formLoginKiki.loginData?.userInfo?.email}</strong>
                 </span>
-                <button onClick={logoutKiki}>{t('Đăng xuất')}</button>
+                <button onClick={formLoginKiki.logout}>{t('Đăng xuất')}</button>
               </div>
             ) : (
               <div className='flex flex-col gap-3 mt-3'>
                 <p className='font-semibold'>{t('Đăng nhập vào KikiLogin')}</p>
                 <input
-                  value={formKikiState.email}
-                  onChange={onChangeFormKikiState}
+                  value={formLoginKiki.email}
+                  onChange={formLoginKiki.updateFormValue}
                   name='email'
                   className='p-1 rounded w-full outline-none border border-gray-300 focus:border-gray-500 focus:shadow-s placeholder:text-sm'
                   placeholder={t('Nhập email')}
                 />
                 <input
-                  value={formKikiState.password}
-                  onChange={onChangeFormKikiState}
+                  value={formLoginKiki.password}
+                  onChange={formLoginKiki.updateFormValue}
                   type='password'
                   name='password'
                   className='p-1 rounded w-full outline-none border border-gray-300 focus:border-gray-500 focus:shadow-s placeholder:text-sm'
@@ -99,7 +118,7 @@ function App() {
                 />
                 <button
                   className='bg-primary-main hover:bg-primary-lighter rounded px-4 py-2 text-white text-sm'
-                  onClick={loginWithKikiLogin}
+                  onClick={formLoginKiki.onLogin}
                 >
                   {t('Đăng nhập')}
                 </button>

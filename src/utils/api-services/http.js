@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { ErrorApi } from './error';
 import { apiSSOEndpoints } from '../configs';
+import { defer } from 'rxjs';
 
-class HttpClient {
+export class HttpClient {
   constructor(baseURL) {
     this.instance = axios.create({
       baseURL,
@@ -69,6 +70,26 @@ class HttpClient {
       url,
       ...config,
     });
+  }
+
+  post$(url, data) {
+    return defer(() =>
+      this.instance({
+        method: 'post',
+        url,
+        data,
+      }),
+    );
+  }
+
+  get$(url, params) {
+    return defer(() =>
+      this.instance({
+        method: 'get',
+        url,
+        params,
+      }),
+    );
   }
 }
 
