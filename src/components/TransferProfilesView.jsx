@@ -1,14 +1,9 @@
 import React from 'react';
-import classNames from 'src/utils/helpers.js';
-import {
-  handleTransferProfile,
-  manageTransferProfiles$,
-  transferProgressStatus,
-} from 'src/features/transfer-profiles.js';
-import useObservable from 'src/hooks/useObservable.js';
+import classNames from 'src/utils/helpers';
+import { handleTransferProfile, manageTransferProfiles$, transferProgressStatus } from 'src/features/transfer-profiles';
+import useObservable from 'src/hooks/useObservable';
 import { useTranslation } from 'react-i18next';
-import { manageFormKikiLogin$, manageFormTransferPlatformLogin$ } from 'src/features/login.js';
-import { useAppContext } from 'src/context/AppContextProvider.jsx';
+import { useAppContext } from 'src/context/AppContextProvider';
 
 function TransferProfilesView() {
   const { t } = useTranslation();

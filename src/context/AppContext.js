@@ -1,4 +1,4 @@
-import { manageFormKikiLogin$, manageFormTransferPlatformLogin$ } from 'src/features/login.js';
+import { manageFormKikiLogin$, manageFormTransferPlatformLogin$ } from 'src/features/login';
 
 export function setupAppContext() {
   const formLoginKiki$ = manageFormKikiLogin$();

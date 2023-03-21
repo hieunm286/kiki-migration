@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import LoginTransferPlatformView from 'src/components/LoginTransferPlatformView.jsx';
-import LoginKikiView from 'src/components/LoginKikiView.jsx';
-import TransferProfilesView from 'src/components/TransferProfilesView.jsx';
-import http, { HttpClient } from 'src/utils/api-services/http.js';
+import LoginTransferPlatformView from 'src/components/LoginTransferPlatformView';
+import LoginKikiView from 'src/components/LoginKikiView';
+import TransferProfilesView from 'src/components/TransferProfilesView';
+import http, { HttpClient } from 'src/utils/api-services/http';
 import { ToastContainer } from 'react-toastify';
 
 function App() {

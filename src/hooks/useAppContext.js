@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { ErrorUtils } from '../utils/api-services/error';
 import { apiServices } from '../apis/index';
 import { setSession } from '../utils/setSession';
-import http, { HttpClient } from '../utils/api-services/http';
 
 export const transferProgressStatus = {
   nothing: -1,

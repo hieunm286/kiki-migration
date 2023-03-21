@@ -1,11 +1,10 @@
 import React from 'react';
 import KikiLogin from 'src/assets/kiki-logo.png';
-import { manageFormKikiLogin$ } from 'src/features/login.js';
-import useObservable from 'src/hooks/useObservable.js';
-import { handleStatisticData } from 'src/features/statistic.js';
+import useObservable from 'src/hooks/useObservable';
+import { handleStatisticData } from 'src/features/statistic';
 import { useTranslation } from 'react-i18next';
-import classNames from 'src/utils/helpers.js';
-import { useAppContext } from 'src/context/AppContextProvider.jsx';
+import classNames from 'src/utils/helpers';
+import { useAppContext } from 'src/context/AppContextProvider';
 
 function LoginKikiView() {
   const { t } = useTranslation();

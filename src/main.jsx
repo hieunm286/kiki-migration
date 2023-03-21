@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 import './locales/i18n';
-import { AppContextProvider } from 'src/context/AppContextProvider.jsx';
+import { AppContextProvider } from 'src/context/AppContextProvider';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <AppContextProvider>

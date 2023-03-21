@@ -5,8 +5,8 @@ import { rxServices } from '../apis/services';
 import { curry } from 'lodash';
 import { getKikiStatistic$, getTransferPlatformStatistic$ } from './statistic';
 import { PLATFORMS } from '../utils/constants';
-import { notifyError } from 'src/utils/notifications.js';
-import i18n from 'src/locales/i18n.js';
+import { notifyError } from 'src/utils/notifications';
+import i18n from 'src/locales/i18n';
 
 export const initialFormValue = {
   email: 'cunghe@gmail.com',

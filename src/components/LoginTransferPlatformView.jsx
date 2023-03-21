@@ -2,9 +2,9 @@ import React, { useCallback } from 'react';
 import { PLATFORMS } from '../utils/constants';
 import useObservable from '../hooks/useObservable';
 import { useTranslation } from 'react-i18next';
-import classNames from 'src/utils/helpers.js';
-import { handleTransferPlatformStatisticData } from 'src/features/statistic.js';
-import { useAppContext } from 'src/context/AppContextProvider.jsx';
+import classNames from 'src/utils/helpers';
+import { handleTransferPlatformStatisticData } from 'src/features/statistic';
+import { useAppContext } from 'src/context/AppContextProvider';
 
 function LoginTransferPlatformView() {
   const { t } = useTranslation();
