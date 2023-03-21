@@ -19,10 +19,11 @@ export const handleStatisticData = (statisticData = {}) => {
 };
 
 export function getTransferPlatformStatistic$(login$, url) {
-  return login$.pipe(
-    switchMap((data) => {
-      console.log(data);
-      return rxServices.getAllProfileTransferPlatform$(url, data.data);
-    }),
-  );
+  return login$.pipe(switchMap((data) => rxServices.getAllProfileTransferPlatform$(url, data.data ?? data)));
 }
+
+export const handleTransferPlatformStatisticData = (statisticData = {}) => {
+  return {
+    totalProfile: statisticData.total ?? statisticData.allProfilesCount ?? 0,
+  };
+};

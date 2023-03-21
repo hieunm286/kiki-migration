@@ -1,6 +1,16 @@
 export const PLATFORMS = [
   {
-    name: 'dolphin',
+    name: 'Dolphin',
+    baseUrl: '/dolphin',
+    loginUrl: function () {
+      return `${this.baseUrl}/login`;
+    },
+    getAllProfileUrl: function () {
+      return `${this.baseUrl}/get-all-profiles`;
+    },
+  },
+  {
+    name: 'GoLogin',
     baseUrl: '/gologin',
     loginUrl: function () {
       return `${this.baseUrl}/login`;
@@ -10,8 +20,8 @@ export const PLATFORMS = [
     },
   },
   {
-    name: 'go login',
-    baseUrl: '/gologin',
+    name: 'Ads power',
+    baseUrl: '/adspower',
     loginUrl: function () {
       return `${this.baseUrl}/login`;
     },
@@ -19,14 +29,4 @@ export const PLATFORMS = [
       return `${this.baseUrl}/get-all-profiles`;
     },
   },
-  // {
-  //   name: 'ads power',
-  //   baseUrl: '/gologin',
-  //   loginUrl: function () {
-  //     return `${this.baseUrl}/login`;
-  //   },
-  //   getAllProfileUrl: function () {
-  //     return `${this.baseUrl}/get-all-profiles`;
-  //   },
-  // },
 ];

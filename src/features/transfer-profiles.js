@@ -15,7 +15,7 @@ export const handleTransferProfile = (manageTransferProfiles$) => {
     .pipe(
       tap((data) => {
         console.log(data);
-        manageTransferProfiles$.next({ transferProgressStatus: transferProgressStatus.transferring });
+        manageTransferProfiles$.next({ transferStatus: transferProgressStatus.transferring });
       }),
       catchError((err) => {
         console.log(err);
@@ -30,7 +30,7 @@ export const handleTransferProfile = (manageTransferProfiles$) => {
               tap((data) => {
                 console.log('data', data);
                 if (data === 'Done') {
-                  manageTransferProfiles$.next({ transferProgressStatus: transferProgressStatus.done, profiles: data });
+                  manageTransferProfiles$.next({ transferStatus: transferProgressStatus.done, profiles: data });
                 } else {
                   manageTransferProfiles$.next({ ...manageTransferProfiles$.getValue(), profiles: data });
                 }

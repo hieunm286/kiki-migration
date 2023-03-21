@@ -95,7 +95,7 @@ export class HttpClient {
 
 const axiosSSO = new HttpClient(apiSSOEndpoints);
 const axiosClient = new HttpClient(apiKikiUrl);
-const axiosLocal = new HttpClient('http://localhost: 8000');
+const axiosLocal = new HttpClient('http://localhost:8000');
 
 const http = {
   sso: axiosSSO,

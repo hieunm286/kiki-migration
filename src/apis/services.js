@@ -8,6 +8,10 @@ const loginKiki$ = (data) => {
 };
 
 const loginTransferPlatform$ = (url, data) => {
+  console.log(data);
+  if (data.platform === 'Dolphin') {
+    return defer(() => Promise.resolve(data.platformToken));
+  }
   return http.local.post$(url, data);
 };
 

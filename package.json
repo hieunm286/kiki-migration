@@ -9,7 +9,7 @@
     "start": "vite --mode production",
     "build:dev": "vite --mode development build",
     "build": "vite build",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build:dev",
     "deploy": "gh-pages -d dist",
     "preview": "vite preview"
   },
@@ -22,6 +22,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.2.0",
+    "react-toastify": "^9.1.1",
     "rxjs": "^7.8.0"
   },
   "devDependencies": {
