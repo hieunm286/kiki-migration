@@ -4,10 +4,16 @@ const setSession = (accessToken) => {
   if (accessToken) {
     localStorage.setItem('accessToken', accessToken);
     http.sso.setAuthorization(accessToken);
+    http.client.setAuthorization(accessToken);
   } else {
     localStorage.removeItem('accessToken');
     http.sso.clearAuthorization();
+    http.client.clearAuthorization();
   }
+};
+
+const setSessionLocal = (accessToken) => {
+  http.local.setAuthorization(accessToken);
 };
 
 const setSessionInfo = (data) => {
@@ -18,4 +24,4 @@ const setSessionInfo = (data) => {
   }
 };
 
-export { setSession, setSessionInfo };
+export { setSession, setSessionInfo, setSessionLocal };

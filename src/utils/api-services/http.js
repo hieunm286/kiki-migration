@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ErrorApi } from './error';
-import { apiSSOEndpoints } from '../configs';
+import { apiKikiUrl, apiSSOEndpoints } from '../configs';
 import { defer } from 'rxjs';
 
 export class HttpClient {
@@ -94,9 +94,13 @@ export class HttpClient {
 }
 
 const axiosSSO = new HttpClient(apiSSOEndpoints);
+const axiosClient = new HttpClient(apiKikiUrl);
+const axiosLocal = new HttpClient('http://localhost: 8000');
 
 const http = {
   sso: axiosSSO,
+  client: axiosClient,
+  local: axiosLocal,
 };
 
 export default http;

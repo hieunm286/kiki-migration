@@ -10,11 +10,11 @@ export const transferProgressStatus = {
   done: 1,
 };
 
-const startTransfer = async () => {
+export const startTransfer = async () => {
   return Promise.resolve('Transferring started...');
 };
 
-const transferPromiseProgress = async () => {
+export const transferPromiseProgress = async () => {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const el = arr[Math.floor(Math.random() * arr.length)];
   if (el === 10) {
@@ -46,12 +46,6 @@ export default function useAppContext() {
 
   const [startFetchProgressStatus, setStartFetchStatus] = useState(transferProgressStatus.nothing);
   const [transferringData, setTransferringData] = useState();
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    console.log(params.get('localPort'));
-    http.local = new HttpClient(`http://localhost/${params.get('localPort')}`);
-  }, []);
 
   useEffect(() => {
     let interval;

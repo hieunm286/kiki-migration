@@ -1,8 +1,10 @@
 import { BehaviorSubject, map, scan, tap } from 'rxjs';
-import { setSession } from '../utils/setSession';
+import { setSession, setSessionLocal } from '../utils/setSession';
 import { applyLoginInput, combineApplyChanges } from '../features/loginInput';
 import { rxServices } from '../apis/services';
 import { curry } from 'lodash';
+import { getKikiStatistic$, getTransferPlatformStatistic$ } from './statistic';
+import { PLATFORMS } from '../utils/constants';
 
 export const initialFormValue = {
   email: 'cunghe@gmail.com',
@@ -11,31 +13,52 @@ export const initialFormValue = {
 
 export const initialTransferPlatformValue = {
   ...initialFormValue,
-  platform: undefined,
+  platformToken: undefined,
+  statistic: undefined,
+  email: 'wgpjtgjpkwfhfv@eurokool.com',
+  password: 'wgpjtgjpkwfhfv@eurokool.com',
 };
 
-function doLogin(loginHelper$, change, state) {
+function loginTransferPlatform(loginHelper$, change, state) {
   change({ ...state, isLoading: true });
-  return loginHelper$(state)
-    .pipe(
-      tap((data) => {
-        console.log(data);
-        change({ ...state, isLoading: false });
-      }),
-    )
-    .subscribe((ch) => {
-      console.log(ch);
-      setSession(ch.data.token);
-      change({ ...state, password: '', loginData: ch.data });
-    });
+  const platform = PLATFORMS.find((platform) => platform.name === state.platform);
+  const login$ = loginHelper$(platform.loginUrl(), state).pipe(
+    tap((data) => {
+      console.log(data);
+      change({ ...state, platformToken: data.data });
+      setSession(data.data.token);
+    }),
+  );
+  const statistic$ = getTransferPlatformStatistic$(login$, platform.getAllProfileUrl());
+  return statistic$.subscribe((ch) => {
+    console.log(ch);
+    change({ ...state, password: '', isLoading: false, statistic: ch.data });
+  });
+}
+
+function loginKiki(loginHelper$, change, state) {
+  change({ ...state, isLoading: true });
+  const login$ = loginHelper$(state).pipe(
+    tap((data) => {
+      console.log(data);
+      setSession(data.data.token);
+    }),
+  );
+  const statistic$ = getKikiStatistic$(login$);
+
+  return statistic$.subscribe((ch) => {
+    console.log(ch);
+    change({ ...state, password: '', isLoading: false, statistic: ch.data });
+  });
 }
 
 function doLogout(change) {
   setSession(undefined);
-  change({ ...initialFormValue, loginData: undefined });
+  change({ ...initialFormValue, statistic: undefined });
 }
 
 function addTransitions(loginHelper$, change, state) {
+  console.log(state);
   return {
     ...state,
     updateFormValue: (e) => {
@@ -47,8 +70,9 @@ function addTransitions(loginHelper$, change, state) {
     updatePlatform: (e) => {
       change({ ...state, platform: e.target.value });
     },
-    onLogin: () => doLogin(loginHelper$, change, state),
-    logout: () => doLogout(change),
+    onLogin: () =>
+      state.platform ? loginTransferPlatform(loginHelper$, change, state) : loginKiki(loginHelper$, change, state),
+    logout: () => (state.platform ? change(initialTransferPlatformValue) : doLogout(change)),
   };
 }
 

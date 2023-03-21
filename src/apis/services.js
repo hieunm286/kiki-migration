@@ -1,15 +1,37 @@
 import http from '../utils/api-services/http';
+import { defer } from 'rxjs';
+import { startTransfer, transferPromiseProgress } from '../hooks/useAppContext';
 
 const loginKiki$ = (data) => {
   console.log(http);
   return http.sso.post$('/user/login', { ...data, serviceCode: 'kikilogin' });
 };
 
-const loginTransferPlatform$ = (data) => {
-  return http.sso.post$('/user/login', { ...data, serviceCode: 'kikilogin' });
+const loginTransferPlatform$ = (url, data) => {
+  return http.local.post$(url, data);
+};
+
+const getAllProfileTransferPlatform$ = (url, token) => {
+  return http.local.post$(url, { token });
+};
+
+const kikiStatistic$ = () => {
+  return http.client.get$('/statistic');
+};
+
+const transferProfiles$ = () => {
+  return defer(() => startTransfer());
+};
+
+const transferringProgress$ = () => {
+  return defer(() => transferPromiseProgress());
 };
 
 export const rxServices = {
   loginKiki$,
   loginTransferPlatform$,
+  kikiStatistic$,
+  transferProfiles$,
+  transferringProgress$,
+  getAllProfileTransferPlatform$,
 };
