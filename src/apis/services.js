@@ -23,12 +23,12 @@ const kikiStatistic$ = () => {
   return http.client.get$('/statistic');
 };
 
-const transferProfiles$ = () => {
-  return defer(() => startTransfer());
+const transferProfiles$ = (url, data) => {
+  return http.local.post$(url, data);
 };
 
-const transferringProgress$ = () => {
-  return defer(() => transferPromiseProgress());
+const transferringProgress$ = (url) => {
+  return http.local.get$(url);
 };
 
 export const rxServices = {

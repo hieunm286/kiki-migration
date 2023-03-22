@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'src/utils/helpers';
-import { handleTransferProfile, manageTransferProfiles$, transferProgressStatus } from 'src/features/transfer-profiles';
+import {
+  handleTransferProfile,
+  listenTransferStatus,
+  manageTransferProfiles$,
+  transferProgressStatus,
+} from 'src/features/transfer-profiles';
 import useObservable from 'src/hooks/useObservable';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from 'src/context/AppContextProvider';
+import { PLATFORMS } from 'src/utils/constants.js';
 
 function TransferProfilesView() {
   const { t } = useTranslation();
@@ -12,9 +18,21 @@ function TransferProfilesView() {
   const [formLoginTransferPlatform] = useObservable(formLoginTransferPlatform$);
   const [formLoginKiki] = useObservable(formLoginKiki$);
 
+  console.log(formLoginTransferPlatform);
+
   const isTransferring = transferData?.transferStatus === transferProgressStatus.transferring;
 
   const isReadyTransfer = !!formLoginKiki?.statistic && !!formLoginTransferPlatform?.statistic;
+
+  useEffect(() => {
+    if (formLoginTransferPlatform?.platform && formLoginTransferPlatform?.platformToken) {
+      listenTransferStatus(
+        manageTransferProfiles$,
+        PLATFORMS.find((platform) => platform.name === formLoginTransferPlatform?.platform),
+        formLoginTransferPlatform?.platformToken,
+      );
+    }
+  }, [formLoginTransferPlatform?.platform, formLoginTransferPlatform?.platformToken]);
 
   if (!transferData) {
     return null;
@@ -35,7 +53,16 @@ function TransferProfilesView() {
           'rounded px-4 py-2 text-white text-sm',
           isTransferring || !isReadyTransfer ? 'bg-gray-300' : 'bg-primary-main' + ' hover:bg-primary-lighter',
         )}
-        onClick={() => (isTransferring || !isReadyTransfer ? {} : handleTransferProfile(manageTransferProfiles$))}
+        onClick={() =>
+          isTransferring || !isReadyTransfer
+            ? {}
+            : handleTransferProfile(
+                manageTransferProfiles$,
+                PLATFORMS.find((platform) => platform.name === formLoginTransferPlatform.platform),
+                formLoginTransferPlatform.platformToken,
+                formLoginKiki.platformToken,
+              )
+        }
       >
         {isTransferring ? t('Đang chuyển đổi') : t('Chuyển đổi')}
       </button>

@@ -17,7 +17,6 @@ export const initialFormValue = {
 // Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MjE4NTQ1MSwidXNlcm5hbWUiOiJ3Z3BqdGdqcGt3ZmhmdkBldXJva29vbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJ0ZWFtSWQiOjIxMzAwMTcsInRva2VuQ3JlYXRlZEF0IjoxNjc5Mzg4MjYwfQ.UNW4PrjX3ILCe0PuiSik1ofVdDSgkDrT4N4DMuMyV5E
 export const initialTransferPlatformValue = {
   ...initialFormValue,
-  platformToken: undefined,
   statistic: undefined,
   email: '',
   password: '',
@@ -47,7 +46,7 @@ function loginTransferPlatform(loginHelper$, change, state) {
       }),
     )
     .subscribe((ch) => {
-      console.log('ch', ch);
+      console.log('ch', { ch, state });
       change({ ...state, password: '', isLoading: false, statistic: ch.data });
     });
 }
@@ -63,6 +62,7 @@ function loginKiki(loginHelper$, change, state) {
     tap((data) => {
       console.log(data);
       setSession(data.data.token);
+      change({ ...state, platformToken: data.data.token, isLoading: true });
     }),
   );
   const statistic$ = getKikiStatistic$(login$);
@@ -75,7 +75,7 @@ function loginKiki(loginHelper$, change, state) {
 
 function doLogout(change) {
   setSession(undefined);
-  change({ ...initialFormValue, statistic: undefined });
+  change({ ...initialFormValue, statistic: undefined, platformToken: undefined });
 }
 
 function addTransitions(loginHelper$, change, state) {
