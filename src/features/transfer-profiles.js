@@ -1,6 +1,6 @@
 import { BehaviorSubject, catchError, EMPTY, interval, startWith, switchMap, takeWhile, tap } from 'rxjs';
 import { rxServices } from '../apis/services';
-import { notifyError } from 'src/utils/notifications.js';
+import { notifyError, notifySuccess } from 'src/utils/notifications.js';
 
 export const transferProgressStatus = {
   nothing: -1,
@@ -10,25 +10,20 @@ export const transferProgressStatus = {
 
 export const every1Seconds$ = interval(1000).pipe(startWith(0));
 
-export const listenTransferStatus = (manageTransferProfiles$, platform, token) => {
+export const listenTransferStatus$ = (manageTransferProfiles$, platform, token) => {
   if (!platform) return;
-
-  return every1Seconds$
-    .pipe(
-      switchMap(() =>
-        rxServices.transferringProgress$(platform.getTransferProfilesProgressUrl()).pipe(
-          tap((data) => {
-            console.log('data', data);
-            if (data === 'Done') {
-              manageTransferProfiles$.next({ transferStatus: transferProgressStatus.done, profiles: data?.data });
-            } else {
-              manageTransferProfiles$.next({ ...manageTransferProfiles$.getValue(), profiles: data?.data });
-            }
-          }),
-        ),
+  console.log(token);
+  return every1Seconds$.pipe(
+    switchMap(() =>
+      rxServices.transferringProgress$(platform.getTransferProfilesProgressUrl()).pipe(
+        tap((data) => {
+          console.log('data', data);
+          manageTransferProfiles$.next({ ...manageTransferProfiles$.getValue(), profiles: data?.data });
+        }),
       ),
-    )
-    .subscribe();
+    ),
+    takeWhile(() => !!token),
+  );
 };
 
 export const handleTransferProfile = (manageTransferProfiles$, platform, platformToken, kikiToken) => {
@@ -39,11 +34,13 @@ export const handleTransferProfile = (manageTransferProfiles$, platform, platfor
     .pipe(
       tap((data) => {
         console.log(data);
+        notifySuccess('Chuyển đổi thành công');
         manageTransferProfiles$.next({ transferStatus: transferProgressStatus.done });
       }),
       catchError((err) => {
         console.log(err);
         notifyError(err.data.reason);
+        manageTransferProfiles$.next({ transferStatus: transferProgressStatus.nothing });
         return EMPTY;
       }),
     )

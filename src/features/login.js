@@ -25,6 +25,7 @@ export const initialTransferPlatformValue = {
 function loginTransferPlatform(loginHelper$, change, state) {
   change({ ...state, isLoading: true });
   const platform = PLATFORMS.find((platform) => platform.name === state.platform);
+  let token;
   const login$ = loginHelper$(platform.loginUrl(), state).pipe(
     catchError((err) => {
       notifyError(i18n.t(err.data.reason));
@@ -33,6 +34,7 @@ function loginTransferPlatform(loginHelper$, change, state) {
     }),
     tap((data) => {
       console.log(data);
+      token = data.data ?? data;
       change({ ...state, isLoading: true, platformToken: data.data ?? data });
     }),
   );
@@ -47,12 +49,14 @@ function loginTransferPlatform(loginHelper$, change, state) {
     )
     .subscribe((ch) => {
       console.log('ch', { ch, state });
-      change({ ...state, password: '', isLoading: false, statistic: ch.data });
+      change({ ...state, password: '', isLoading: false, statistic: ch.data, platformToken: token });
     });
 }
 
 function loginKiki(loginHelper$, change, state) {
   change({ ...state, isLoading: true });
+  let token;
+
   const login$ = loginHelper$(state).pipe(
     catchError((err) => {
       notifyError(i18n.t(err.data.reason));
@@ -62,6 +66,7 @@ function loginKiki(loginHelper$, change, state) {
     tap((data) => {
       console.log(data);
       setSession(data.data.token);
+      token = data.data.token;
       change({ ...state, platformToken: data.data.token, isLoading: true });
     }),
   );
@@ -69,7 +74,7 @@ function loginKiki(loginHelper$, change, state) {
 
   return statistic$.subscribe((ch) => {
     console.log(ch);
-    change({ ...state, password: '', isLoading: false, statistic: ch.data });
+    change({ ...state, password: '', isLoading: false, statistic: ch.data, platformToken: token });
   });
 }
 
@@ -93,7 +98,8 @@ function addTransitions(loginHelper$, change, state) {
     },
     onLogin: () =>
       state.platform ? loginTransferPlatform(loginHelper$, change, state) : loginKiki(loginHelper$, change, state),
-    logout: () => (state.platform ? change(initialTransferPlatformValue) : doLogout(change)),
+    logout: () =>
+      state.platform ? change({ ...initialTransferPlatformValue, platformToken: undefined }) : doLogout(change),
   };
 }
 

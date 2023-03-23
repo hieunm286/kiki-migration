@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import classNames from 'src/utils/helpers';
 import {
   handleTransferProfile,
-  listenTransferStatus,
+  listenTransferStatus$,
   manageTransferProfiles$,
   transferProgressStatus,
 } from 'src/features/transfer-profiles';
@@ -25,13 +25,23 @@ function TransferProfilesView() {
   const isReadyTransfer = !!formLoginKiki?.statistic && !!formLoginTransferPlatform?.statistic;
 
   useEffect(() => {
+    let subscriber;
+    console.log('hehehe');
     if (formLoginTransferPlatform?.platform && formLoginTransferPlatform?.platformToken) {
-      listenTransferStatus(
+      console.log(1111);
+      subscriber = listenTransferStatus$(
         manageTransferProfiles$,
         PLATFORMS.find((platform) => platform.name === formLoginTransferPlatform?.platform),
         formLoginTransferPlatform?.platformToken,
-      );
+      ).subscribe();
+    } else {
+      console.log('2222');
+      subscriber?.unsubscribe();
     }
+
+    return () => {
+      subscriber?.unsubscribe();
+    };
   }, [formLoginTransferPlatform?.platform, formLoginTransferPlatform?.platformToken]);
 
   if (!transferData) {
