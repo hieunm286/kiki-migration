@@ -74,7 +74,6 @@ export default function useAppContext() {
   const loginWithKikiLogin = async () => {
     try {
       const response = await apiServices.loginKiki(formKikiState);
-      console.log(response);
       setSession(response.data.token);
       setKikiUser({
         email: response.data.userInfo?.email,
@@ -91,7 +90,6 @@ export default function useAppContext() {
     if (startFetchProgressStatus === transferProgressStatus.transferring) return;
     try {
       const response = await startTransfer();
-      console.log(response);
       setStartFetchStatus(transferProgressStatus.transferring);
     } catch (err) {}
   };
@@ -99,7 +97,6 @@ export default function useAppContext() {
   const fetchTransferringProgress = async () => {
     try {
       const response = await transferPromiseProgress();
-      console.log(response);
       setTransferringData(response);
       if (response === 'Done') {
         setStartFetchStatus(transferProgressStatus.done);

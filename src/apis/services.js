@@ -3,12 +3,10 @@ import { defer } from 'rxjs';
 import { startTransfer, transferPromiseProgress } from '../hooks/useAppContext';
 
 const loginKiki$ = (data) => {
-  console.log(http);
   return http.sso.post$('/user/login', { ...data, serviceCode: 'kikilogin' });
 };
 
 const loginTransferPlatform$ = (url, data) => {
-  console.log(data);
   if (data.platform === 'Dolphin') {
     return defer(() => Promise.resolve(data.platformToken));
   }

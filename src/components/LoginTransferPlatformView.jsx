@@ -11,7 +11,6 @@ function LoginTransferPlatformView() {
   const { formLoginTransferPlatform$ } = useAppContext();
   const [formLoginTransferPlatform] = useObservable(formLoginTransferPlatform$);
   const { totalProfile } = handleTransferPlatformStatisticData(formLoginTransferPlatform?.statistic);
-  console.log('formLoginTransferPlatform', formLoginTransferPlatform);
   const isValidForm =
     formLoginTransferPlatform &&
     ((formLoginTransferPlatform.platform === 'Dolphin' && formLoginTransferPlatform.platformToken) ||

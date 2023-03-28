@@ -9,8 +9,8 @@ import { notifyError } from 'src/utils/notifications';
 import i18n from 'src/locales/i18n';
 
 export const initialFormValue = {
-  email: 'cunghe@gmail.com',
-  password: '123456',
+  email: '',
+  password: '',
 };
 
 // wgpjtgjpkwfhfv@eurokool.com
@@ -33,7 +33,6 @@ function loginTransferPlatform(loginHelper$, change, state) {
       return EMPTY;
     }),
     tap((data) => {
-      console.log(data);
       token = data.data ?? data;
       change({ ...state, isLoading: true, platformToken: data.data ?? data });
     }),
@@ -48,7 +47,6 @@ function loginTransferPlatform(loginHelper$, change, state) {
       }),
     )
     .subscribe((ch) => {
-      console.log('ch', { ch, state });
       change({ ...state, password: '', isLoading: false, statistic: ch.data, platformToken: token });
     });
 }
@@ -64,7 +62,6 @@ function loginKiki(loginHelper$, change, state) {
       return EMPTY;
     }),
     tap((data) => {
-      console.log(data);
       setSession(data.data.token);
       token = data.data.token;
       change({ ...state, platformToken: data.data.token, isLoading: true });
@@ -73,7 +70,6 @@ function loginKiki(loginHelper$, change, state) {
   const statistic$ = getKikiStatistic$(login$);
 
   return statistic$.subscribe((ch) => {
-    console.log(ch);
     change({ ...state, password: '', isLoading: false, statistic: ch.data, platformToken: token });
   });
 }
@@ -84,7 +80,6 @@ function doLogout(change) {
 }
 
 function addTransitions(loginHelper$, change, state) {
-  console.log(state);
   return {
     ...state,
     updateFormValue: (e) => {
@@ -108,7 +103,6 @@ export function manageFormKikiLogin$() {
   const state$ = change$.asObservable();
 
   function change(ch) {
-    console.log({ ch });
     change$.next(ch);
   }
 
@@ -122,7 +116,6 @@ export function manageFormTransferPlatformLogin$() {
   const state$ = change$.asObservable();
 
   function change(ch) {
-    console.log(ch);
     change$.next(ch);
   }
 

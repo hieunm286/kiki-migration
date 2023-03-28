@@ -7,7 +7,6 @@ export default function useObservable(o$) {
   useEffect(() => {
     const subscription = o$.subscribe({
       next: (v) => {
-        console.log(v);
         setValue(v);
       },
       error: (e) => {

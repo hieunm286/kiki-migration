@@ -15,8 +15,6 @@ function LoginKikiView() {
     formLoginKiki?.statistic,
   );
 
-  console.log({ formLoginKiki });
-
   if (!formLoginKiki) {
     return null;
   }

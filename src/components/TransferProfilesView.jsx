@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import classNames from 'src/utils/helpers';
 import {
-  handleTransferProfile,
+  handleTransferProfile$,
   listenTransferStatus$,
   manageTransferProfiles$,
   transferProgressStatus,
@@ -18,24 +18,19 @@ function TransferProfilesView() {
   const [formLoginTransferPlatform] = useObservable(formLoginTransferPlatform$);
   const [formLoginKiki] = useObservable(formLoginKiki$);
 
-  console.log(formLoginTransferPlatform);
-
   const isTransferring = transferData?.transferStatus === transferProgressStatus.transferring;
 
   const isReadyTransfer = !!formLoginKiki?.statistic && !!formLoginTransferPlatform?.statistic;
 
   useEffect(() => {
     let subscriber;
-    console.log('hehehe');
     if (formLoginTransferPlatform?.platform && formLoginTransferPlatform?.platformToken) {
-      console.log(1111);
       subscriber = listenTransferStatus$(
         manageTransferProfiles$,
         PLATFORMS.find((platform) => platform.name === formLoginTransferPlatform?.platform),
         formLoginTransferPlatform?.platformToken,
       ).subscribe();
     } else {
-      console.log('2222');
       subscriber?.unsubscribe();
     }
 
@@ -66,7 +61,7 @@ function TransferProfilesView() {
         onClick={() =>
           isTransferring || !isReadyTransfer
             ? {}
-            : handleTransferProfile(
+            : handleTransferProfile$(
                 manageTransferProfiles$,
                 PLATFORMS.find((platform) => platform.name === formLoginTransferPlatform.platform),
                 formLoginTransferPlatform.platformToken,

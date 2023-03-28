@@ -11,7 +11,6 @@ function App() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    console.log(params.get('localPort'));
     http.local = new HttpClient(`http://localhost:${params.get('localPort')}`);
     const ssoUrl = params.get('apiSSOUrl');
     const apiClientUrl = params.get('apiClientUrl');

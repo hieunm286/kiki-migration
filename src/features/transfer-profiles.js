@@ -12,12 +12,10 @@ export const every1Seconds$ = interval(1000).pipe(startWith(0));
 
 export const listenTransferStatus$ = (manageTransferProfiles$, platform, token) => {
   if (!platform) return;
-  console.log(token);
   return every1Seconds$.pipe(
     switchMap(() =>
       rxServices.transferringProgress$(platform.getTransferProfilesProgressUrl()).pipe(
         tap((data) => {
-          console.log('data', data);
           manageTransferProfiles$.next({ ...manageTransferProfiles$.getValue(), profiles: data?.data });
         }),
       ),
@@ -26,19 +24,17 @@ export const listenTransferStatus$ = (manageTransferProfiles$, platform, token) 
   );
 };
 
-export const handleTransferProfile = (manageTransferProfiles$, platform, platformToken, kikiToken) => {
+export const handleTransferProfile$ = (manageTransferProfiles$, platform, platformToken, kikiToken) => {
   if (!platform) return;
   manageTransferProfiles$.next({ transferStatus: transferProgressStatus.transferring });
   return rxServices
     .transferProfiles$(platform.transferProfilesUrl(), { token: platformToken, kikiToken })
     .pipe(
       tap((data) => {
-        console.log(data);
         notifySuccess('Chuyển đổi thành công');
         manageTransferProfiles$.next({ transferStatus: transferProgressStatus.done });
       }),
       catchError((err) => {
-        console.log(err);
         notifyError(err.data.reason);
         manageTransferProfiles$.next({ transferStatus: transferProgressStatus.nothing });
         return EMPTY;
