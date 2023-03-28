@@ -36,7 +36,9 @@ function LoginKikiView() {
           <span>
             {usedProfile}/{totalProfile} profiles - {usedMember}/{totalMember} {t('thành viên')}
           </span>
-          <button onClick={formLoginKiki.logout}>{t('Đăng xuất')}</button>
+          <button onClick={formLoginKiki.logout} className='text-primary-main italic'>
+            {t('Đăng xuất')}
+          </button>
         </div>
       ) : (
         <div className='flex flex-col gap-3 mt-5'>

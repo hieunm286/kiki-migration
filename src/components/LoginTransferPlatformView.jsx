@@ -90,7 +90,9 @@ function LoginTransferPlatformView() {
             )}
 
             <span>{totalProfile} profiles</span>
-            <button onClick={formLoginTransferPlatform.logout}>{t('Đăng xuất')}</button>
+            <button onClick={formLoginTransferPlatform.logout} className='text-primary-main italic'>
+              {t('Đăng xuất')}
+            </button>
           </div>
         ) : (
           <>

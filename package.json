@@ -9,7 +9,7 @@
     "start": "vite --mode production",
     "build:dev": "vite --mode development build",
     "build": "vite build",
-    "predeploy": "npm run build:dev",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "preview": "vite preview"
   },
