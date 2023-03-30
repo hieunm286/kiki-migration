@@ -33,15 +33,27 @@ function loginTransferPlatform(loginHelper$, change, state) {
       return EMPTY;
     }),
     tap((data) => {
-      token = data.data ?? data;
-      change({ ...state, isLoading: true, platformToken: data.data ?? data });
+      console.log(data);
+      token = data.data ?? (typeof data === 'string' ? data : undefined);
+      console.log(token);
+      if (!token) {
+        // notifyError(i18n.t('Request failed: Unauthorized with wrong username and password'));
+        // change({ ...state, isLoading: false });
+        // return EMPTY;
+        throw new Error('Request failed: Unauthorized with wrong username or password');
+      }
+      if (token) change({ ...state, isLoading: true, platformToken: data.data ?? data });
     }),
   );
   const statistic$ = getTransferPlatformStatistic$(login$, platform.getAllProfileUrl());
   return statistic$
     .pipe(
       catchError((err) => {
-        notifyError(i18n.t(err.data.reason));
+        if (err instanceof Error) {
+          notifyError(i18n.t(err.message));
+        } else {
+          notifyError(i18n.t(err.data.reason));
+        }
         change({ ...state, isLoading: false });
         return EMPTY;
       }),

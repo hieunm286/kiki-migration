@@ -15,10 +15,10 @@ function App() {
     const ssoUrl = params.get('apiSSOUrl');
     const apiClientUrl = params.get('apiClientUrl');
     if (ssoUrl) {
-      http.sso = new HttpClient(ssoUrl);
+      http.sso = new HttpClient(`${ssoUrl}/api`);
     }
     if (apiClientUrl) {
-      http.client = new HttpClient(apiClientUrl);
+      http.client = new HttpClient(`${apiClientUrl}/api`);
     }
   }, []);
 
