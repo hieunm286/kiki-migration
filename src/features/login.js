@@ -35,7 +35,7 @@ function loginTransferPlatform(loginHelper$, change, state) {
     tap((data) => {
       console.log(data);
       token = data.data ?? (typeof data === 'string' ? data : undefined);
-      console.log(token);
+      console.log(state);
       if (!token) {
         // notifyError(i18n.t('Request failed: Unauthorized with wrong username and password'));
         // change({ ...state, isLoading: false });
@@ -101,7 +101,11 @@ function addTransitions(loginHelper$, change, state) {
       });
     },
     updatePlatform: (e) => {
-      change({ ...state, platform: e.target.value });
+      if (e.target.value === 'Dolphin') {
+        change({ ...state, ...initialFormValue, platform: e.target.value });
+      } else {
+        change({ ...state, platform: e.target.value });
+      }
     },
     onLogin: () =>
       state.platform ? loginTransferPlatform(loginHelper$, change, state) : loginKiki(loginHelper$, change, state),
